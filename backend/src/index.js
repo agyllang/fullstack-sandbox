@@ -15,23 +15,19 @@ let todoLists = {
   '0000000001': {
     id: '0000000001',
     title: 'First List',
-    todos: ['First todo of first list!'],
+    todos: [{ text: 'First todo of first list!', completed: false }],
   },
   '0000000002': {
     id: '0000000002',
     title: 'Second List',
-    todos: ['First todo of second list!'],
+    todos: [{ text: 'First todo of 2nd list!', completed: true }],
   },
 }
 
 app.get('/', (req, res) => res.send('Hello World!'))
 
-
-
 //client GET-calls, returns the todo lists.
 app.get('/api', (req, res) => res.json(todoLists))
-
-
 
 //Saving Todo lists on server from client POST calls.
 app.post('/api/save', (req, res) => {
@@ -47,8 +43,7 @@ app.post('/api/save', (req, res) => {
 
   todoLists[id].todos = todos
 
-  console.log("todoList server state:,",todoLists)
-
+  console.log('todoList server state:,', todoLists)
 })
 
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`))
