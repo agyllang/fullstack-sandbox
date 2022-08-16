@@ -7,6 +7,7 @@ import {
   ListItemText,
   ListItemIcon,
   Typography,
+  Chip,
 } from '@mui/material'
 import ReceiptIcon from '@mui/icons-material/Receipt'
 import { TodoListForm } from './TodoListForm'
@@ -36,8 +37,8 @@ const fetchTodoLists = async () => {
   return await response.json()
 }
 const saveTodosToLocalServer = (id, todos) => {
-  console.log("saveTodosToLocalServer todos:",todos)
-  console.log("id:",id)
+  console.log('saveTodosToLocalServer todos:', todos)
+  console.log('id:', id)
   fetch('http://localhost:3001/api/save', {
     method: 'POST',
     body: JSON.stringify({ id: id, todos: todos }),
@@ -45,11 +46,19 @@ const saveTodosToLocalServer = (id, todos) => {
       'Content-Type': 'application/json',
     },
   })
-  // .then((response) =>
-  //   response.json().then((data) => {
-  //     console.log('saved data:', data)
-  //   })
-  // )
+}
+
+//checks the status of the list, and keeps track of the number of completed todo's
+const checkTodoList = (list) => {
+  var numberOfCompleted = 0
+  list.todos.forEach((todo) => {
+    if (todo.completed) numberOfCompleted += 1
+  })
+
+  return {
+    completed: numberOfCompleted > 0 ? list.todos.length === numberOfCompleted : false,
+    label: list.todos.length > 0 ? `${numberOfCompleted}/${list.todos.length}` : 'Empty',
+  }
 }
 
 export const TodoLists = ({ style }) => {
@@ -57,7 +66,6 @@ export const TodoLists = ({ style }) => {
   const [activeList, setActiveList] = useState()
 
   useEffect(() => {
-
     fetchTodoLists().then(setTodoLists)
   }, [])
 
@@ -74,6 +82,16 @@ export const TodoLists = ({ style }) => {
                   <ReceiptIcon />
                 </ListItemIcon>
                 <ListItemText primary={todoLists[key].title} />
+                <ListItemIcon>
+                  <Chip
+                    label={
+                      checkTodoList(todoLists[key]).completed
+                        ? `Completed ${checkTodoList(todoLists[key]).label}`
+                        : ` ${checkTodoList(todoLists[key]).label}`
+                    }
+                    color={checkTodoList(todoLists[key]).completed ? 'success' : 'default'}
+                  ></Chip>
+                </ListItemIcon>
               </ListItem>
             ))}
           </List>
@@ -84,7 +102,7 @@ export const TodoLists = ({ style }) => {
           key={activeList} // use key to make React recreate component to reset internal state
           todoList={todoLists[activeList]}
           saveTodoList={(id, { todos }) => {
-            console.log("todos prop",todos)
+            console.log('todos prop', todos)
             const listToUpdate = todoLists[id]
             setTodoLists({
               ...todoLists,

@@ -88,6 +88,7 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
                           handleCheckbox(event, index)
                         }}
                         checked={todo.completed}
+                        color={'success'}
                       />
                     }
                     label='Completed'
