@@ -12,23 +12,42 @@ import ReceiptIcon from '@mui/icons-material/Receipt'
 import { TodoListForm } from './TodoListForm'
 
 // Simulate network
-const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
+// const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
-const fetchTodoLists = () => {
-  return sleep(1000).then(() =>
-    Promise.resolve({
-      '0000000001': {
-        id: '0000000001',
-        title: 'First List',
-        todos: ['First todo of first list!'],
-      },
-      '0000000002': {
-        id: '0000000002',
-        title: 'Second List',
-        todos: ['First todo of second list!'],
-      },
-    })
-  )
+// const fetchTodoLists = () => {
+//   return sleep(1000).then(() =>
+//     Promise.resolve({
+//       '0000000001': {
+//         id: '0000000001',
+//         title: 'First List',
+//         todos: ['First todo of first list!'],
+//       },
+//       '0000000002': {
+//         id: '0000000002',
+//         title: 'Second List',
+//         todos: ['First todo of second list!'],
+//       },
+//     })
+//   )
+// }
+
+const fetchTodoLists = async () => {
+  const response = await fetch('http://localhost:3001/api')
+  return await response.json()
+}
+const saveTodosToLocalServer = (id, todos) => {
+  fetch('http://localhost:3001/api/save', {
+    method: 'POST',
+    body: JSON.stringify({ id: id, todos: todos }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  })
+  // .then((response) =>
+  //   response.json().then((data) => {
+  //     console.log('saved data:', data)
+  //   })
+  // )
 }
 
 export const TodoLists = ({ style }) => {
@@ -36,6 +55,7 @@ export const TodoLists = ({ style }) => {
   const [activeList, setActiveList] = useState()
 
   useEffect(() => {
+
     fetchTodoLists().then(setTodoLists)
   }, [])
 
@@ -67,6 +87,7 @@ export const TodoLists = ({ style }) => {
               ...todoLists,
               [id]: { ...listToUpdate, todos },
             })
+            saveTodosToLocalServer(id, todos)
           }}
         />
       )}
