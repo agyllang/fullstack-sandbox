@@ -36,6 +36,8 @@ const fetchTodoLists = async () => {
   return await response.json()
 }
 const saveTodosToLocalServer = (id, todos) => {
+  console.log("saveTodosToLocalServer todos:",todos)
+  console.log("id:",id)
   fetch('http://localhost:3001/api/save', {
     method: 'POST',
     body: JSON.stringify({ id: id, todos: todos }),
@@ -82,6 +84,7 @@ export const TodoLists = ({ style }) => {
           key={activeList} // use key to make React recreate component to reset internal state
           todoList={todoLists[activeList]}
           saveTodoList={(id, { todos }) => {
+            console.log("todos prop",todos)
             const listToUpdate = todoLists[id]
             setTodoLists({
               ...todoLists,

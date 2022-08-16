@@ -39,13 +39,16 @@ app.post('/api/save', (req, res) => {
   const todos = req.body.todos
 
   //return message
-  res.send("Todo's saved on server:", todos)
+  res.send("Todo's saved on server")
 
   //printing for server terminal
   console.log('req.body id', id)
   console.log('req.body.todos', todos)
 
   todoLists[id].todos = todos
+
+  console.log("todoList server state:,",todoLists)
+
 })
 
 app.listen(PORT, () => console.log(`Example app listening on port ${PORT}!`))
