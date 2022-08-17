@@ -29,7 +29,7 @@ const timeLeft = (time) => {
 
 const convertTimeStamp = (t) => {
   var overdue = t < 0 //t is negative, it means that more time has passed since the todo was due
-  var time = Math.abs(t) 
+  var time = Math.abs(t)
 
   var days = Math.floor(time / (1000 * 60 * 60 * 24))
   var hours = Math.floor((time % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
@@ -38,7 +38,7 @@ const convertTimeStamp = (t) => {
 }
 
 const DueComponent = ({ time, completed }) => {
-
+  //Component displays the if a todo is due or overdue, and the time
   var timeObj = convertTimeStamp(timeLeft(time))
 
   return (
@@ -109,7 +109,6 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
     delayedSave(changedTodoList)
   }
 
-  
   const handleDateChange = (value, index) => {
     var todoObj = { ...todos[index] }
     todoObj.dueDate = value.getTime()
@@ -126,9 +125,7 @@ export const TodoListForm = ({ todoList, saveTodoList }) => {
     <Card sx={{ margin: '0 1rem' }}>
       <CardContent>
         <Typography component='h2'>{todoList.title}</Typography>
-        <form
-          style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}
-        >
+        <form style={{ display: 'flex', flexDirection: 'column', flexGrow: 1 }}>
           {todos !== undefined &&
             todos.map((todo, index) => (
               <div
